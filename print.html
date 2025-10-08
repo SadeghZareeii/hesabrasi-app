@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>چاپ اطلاعات مددجو</title>
+    <style>
+      body {
+        font-family: Tahoma, "Vazir", Arial, sans-serif;
+        direction: rtl;
+        text-align: right;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td {
+        border: 1px solid #000;
+        padding: 8px;
+      }
+      h1 {
+        text-align: center;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        font-weight: bold;
+      }
+
+      /* برای نمایش روی صفحه (غیر چاپ) هم خوب دیده شود */
+      .bism {
+        font-weight: 900;
+        font-size: 20px;
+      }
+      .report-title {
+        font-weight: 400;
+        text-align: center;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <div id="print-area"></div>
+    <div style="margin-top: 20px; text-align: center">
+      <button id="printBtn">🖨 چاپ</button>
+      <button id="goBackBtn">⬅ بازگشت</button>
+    </div>
+    <script src="renderer/app.js"></script>
+  </body>
+</html>

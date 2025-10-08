@@ -1,0 +1,36 @@
+body {
+  font-family: Tahoma, sans-serif;
+  direction: rtl;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #eef2f7;
+  margin: 0;
+}
+.login {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  width: 320px;
+  text-align: center;
+}
+.login__title {
+  margin-bottom: 12px;
+}
+.login__input {
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+.login__btn {
+  padding: 8px 12px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}

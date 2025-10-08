@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="سامانه ثبت و مدیریت اطلاعات مددجویان" />
+    <meta name="author" content="Sadegh" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#007bff" />
+    <title>ثبت اطلاعات مددجو</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <svg class="hidden">
+      <symbol
+        id="user"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+        />
+      </symbol>
+      <symbol
+        id="x-mark"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+        />
+      </symbol>
+    </svg>
+    <!-- لودر -->
+    <div id="loader" class="loader-container">
+      <div class="spinner"></div>
+      <p>در حال بارگذاری اطلاعات...</p>
+    </div>
+
+    <!-- فرم اصلی -->
+    <div
+      id="form-container"
+      style="display: none; flex-direction: column; align-items: center"
+    >
+      <h1 style="text-align: center">
+        فرم ثبت اطلاعات دریافت و پرداخت <br />
+        مساعدت‌های کانون فرهنگی هنری مسجد حضرت ولی عصر (عج)
+      </h1>
+
+      <div class="admin__icon--wrapper">
+        <div class="icon__admin--wrapper">
+          <svg class="icon__admin">
+            <use href="#user"></use>
+          </svg>
+          <div class="hidden menu__box">
+            <div class="menu__box--header">
+              <svg class="x-mark">
+                <use href="#x-mark"></use>
+              </svg>
+              <div class="time-box__wrapper">
+                <div class="time-box">
+                  <span id="clock"></span>
+                </div>
+                <div class="time-box">
+                  <span id="date"></span>
+                </div>
+              </div>
+            </div>
+            <div class="menu__box--main">
+              <button class="btn show__list--btn" id="goToList">
+                مشاهده لیست
+              </button>
+              <button class="btn backup__btn" id="backupBtn">
+                پشتیبانی از اطلاعات
+              </button>
+              <button class="open__password--modal" id="openPasswordModal">
+                تغییر رمز ورود
+              </button>
+            </div>
+            <div class="  overflow--icon"></div>
+          </div>
+        </div>
+      </div>
+      <div class="container__wrapper">
+        <form id="form" class="grid-form">
+          <!--  -->
+          <div class="">
+            <label for="field1">نام:</label>
+            <input id="field1" type="text" name="نام" placeholder="نام" />
+          </div>
+          <div class="">
+            <label for="field2">نام خانوادگی:</label>
+            <input
+              id="field2"
+              type="text"
+              name="نام خانوادگی"
+              placeholder="نام خانوادگی"
+            />
+          </div>
+          <div class="">
+            <label for="field3">نام پدر:</label>
+            <input
+              id="field3"
+              type="text"
+              name="نام پدر"
+              placeholder="نام پدر"
+            />
+          </div>
+          <div class="">
+            <label for="field4">شماره شناسنامه:</label>
+            <input
+              id="field4"
+              type="text"
+              name="شماره شناسنامه"
+              placeholder="شماره شناسنامه"
+            />
+          </div>
+          <div class="">
+            <label for="field5">شماره ملی:</label>
+            <input
+              id="field5"
+              type="text"
+              name="شماره ملی"
+              placeholder="شماره ملی"
+            />
+          </div>
+          <div class="">
+            <label for="field6">تاریخ تولد:</label>
+            <input
+              id="field6"
+              type="text"
+              name="تاریخ تولد"
+              placeholder="تاریخ تولد"
+            />
+          </div>
+          <div class="">
+            <label for="field7">شماره تماس:</label>
+            <input
+              id="field7"
+              type="text"
+              name="شماره تماس"
+              placeholder="شماره تماس"
+            />
+          </div>
+          <div class="">
+            <label for="field8">نوع مساعدت:</label>
+            <input
+              id="field8"
+              type="text"
+              name="نوع مساعدت"
+              placeholder="نوع مساعدت"
+            />
+          </div>
+          <div class="">
+            <label for="field9">مقدار مساعدت:</label>
+            <input
+              id="field9"
+              type="text"
+              name="مقدار مساعدت"
+              placeholder="مقدار مساعدت"
+            />
+          </div>
+          <div class="">
+            <label for="field10">نیازها:</label>
+            <input
+              id="field10"
+              type="text"
+              name="نیازها"
+              placeholder="نیازها"
+            />
+          </div>
+          <div class="">
+            <label for="field11">آدرس:</label>
+            <input id="field11" type="text" name="آدرس" placeholder="آدرس" />
+          </div>
+          <div class="">
+            <label for="field12">تعداد نفرات خانواده:</label>
+            <input
+              id="field12"
+              type="text"
+              name="تعداد نفرات خانواده"
+              placeholder="تعداد نفرات خانواده"
+            />
+          </div>
+          <div class="">
+            <label for="field13">تعداد تحت پوشش:</label>
+            <input
+              id="field13"
+              type="text"
+              name="تعداد تحت پوشش"
+              placeholder="تعداد تحت پوشش"
+            />
+          </div>
+          <div class="">
+            <label for="field14">نوع بیماری:</label>
+            <input
+              id="field14"
+              type="text"
+              name="نوع بیماری"
+              placeholder="نوع بیماری"
+            />
+          </div>
+          <div class="">
+            <label for="field15">وضعیت شغلی:</label>
+            <input
+              id="field15"
+              type="text"
+              name="وضعیت شغلی"
+              placeholder="وضعیت شغلی"
+            />
+          </div>
+          <div class="">
+            <label for="field16">نوع بیماری/نیاز:</label>
+            <input
+              id="field16"
+              type="text"
+              name="نوع بیماری/نیاز"
+              placeholder="نوع بیماری/نیاز"
+            />
+          </div>
+          <div class="">
+            <label for="field18">نام ضمیر اهدا کننده:</label>
+            <input
+              id="field18"
+              type="text"
+              name="نام ضمیر اهدا کننده"
+              placeholder="نام ضمیر اهدا کننده"
+            />
+          </div>
+          <div class="">
+            <label for="field19">تاریخ انجام:</label>
+            <input
+              id="field19"
+              type="text"
+              name="تاریخ انجام"
+              placeholder="تاریخ انجام"
+            />
+          </div>
+          <div class="full-row">
+            <label for="field17">توضیحات:</label>
+            <textarea id="17" name="توضیحات" placeholder="توضیحات"></textarea>
+          </div>
+          <button class="btn submit__btn" id="submit" type="submit">
+            ذخیره
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- دکمه تغییر رمز -->
+
+    <!-- مودال تغییر رمز -->
+    <div id="password-modal" class="modal" style="display: none">
+      <div class="modal-content">
+        <h2>تغییر رمز ورود</h2>
+        <input type="password" id="newPassword" placeholder="رمز جدید" />
+        <button id="changePasswordBtn">تغییر رمز</button>
+        <button id="closePasswordModal">بستن</button>
+        <div id="passwordChangeMsg" class="success"></div>
+      </div>
+    </div>
+
+    <script src="renderer/app.js"></script>
+  </body>
+</html>

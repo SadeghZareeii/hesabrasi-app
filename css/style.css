@@ -1,0 +1,543 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* heler Class */
+
+.hidden {
+  display: none;
+  visibility: hidden;
+  overflow: hidden;
+  opacity: 0;
+}
+
+/* tag css  */
+h1 {
+  font-size: 20px;
+  font-weight: 700;
+}
+/* App Css */
+
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+*,
+:after,
+:before {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+body {
+  line-height: 1.6;
+  font-size: 1.6rem;
+  font-family: Tahoma, Arial, sans-serif;
+  background: #f0f0f0;
+  overflow-x: hidden;
+  padding: 20px;
+  color: #333;
+  position: relative;
+}
+
+input,
+textarea,
+button {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 100%;
+  max-width: 320px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  background: white;
+  table-layout: fixed;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  width: 120px;
+  text-align: center;
+}
+
+button {
+  margin-right: 5px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  border: none;
+  background: #ddd;
+  cursor: pointer;
+  border-radius: 6.25px;
+  width: 45px;
+}
+
+.pagination button.active {
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid #ccc;
+  border-top: 6px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+td button {
+  width: 100%;
+  margin: 10px auto;
+}
+
+#form {
+  /* width: 320px; */
+  margin: auto;
+}
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(4, 2fr); /* ۵ ستون مساوی */
+  gap: 10px; /* فاصله بین ستون‌ها و ردیف‌ها */
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-form div {
+  display: flex;
+  flex-direction: column; /* لیبل بالا، اینپوت پایین */
+  align-items: flex-start;
+}
+
+.grid-form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* آخرین div کل عرض رو بگیره */
+.grid-form .full-row {
+  grid-column: 1 / -1; /* از ستون اول تا آخر */
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.modal-content {
+  background: white;
+  padding: 80px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-row {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row label {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.success {
+  color: green;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.btn {
+  width: 100%;
+  max-width: 320px;
+}
+td.value-نام,
+td.value-نام-خانوادگی,
+td.value-نام-پدر,
+td.value-شماره-شناسنامه,
+td.value-شماره-ملی,
+td.value-تاریخ-تولد,
+td.value-شماره-تماس,
+td.value-نوع-مساعدت,
+td.value-مقدار-مساعدت,
+td.value-نیازها,
+td.value-آدرس,
+td.value-تعداد-نفرات-خانواده,
+td.value-تعداد-تحت-پوشش,
+td.value-نوع-بیماری,
+td.value-وضعیت-شغلی,
+td.value-نوع-بیمارینیاز,
+td.value-توضیحات,
+td.value-نام-ضمیر-اهدا-کننده,
+td.value-تاریخ-انجام {
+  max-width: 200px; /* عرض محدود */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center; /* وسط‌چین */
+}
+
+/* اندازه و حاشیه صفحه A4 */
+@page {
+  size: A4;
+  margin: 20mm;
+}
+
+/* استایل‌های چاپ */
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+  }
+  .print-header {
+    text-align: center;
+    margin-bottom: 10mm;
+  }
+  .bism {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .report-title {
+    margin: 6px 0 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    direction: rtl;
+    font-size: 13px;
+  }
+  .print-table td {
+    border: 1px solid #444;
+    padding: 6px 8px;
+    vertical-align: top;
+  }
+  .print-table td.label {
+    width: 30%;
+    font-weight: 600;
+    background: #f7f7f7;
+  }
+
+  .print-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10mm;
+    font-size: 12px;
+  }
+}
+
+.container__wrapper {
+  margin: 5px auto;
+  padding: 25px;
+  width: 950px;
+  background-color: #fff;
+}
+
+.submit__btn {
+  width: 60px;
+  margin-right: auto;
+  grid-column: 1 / -1;
+}
+.show__list--btn {
+}
+.backup__btn {
+}
+.open__password--modal {
+}
+
+.admin__icon--wrapper {
+  position: absolute;
+  right: 130px;
+  /* background-color: #007bff; */
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon__admin--wrapper {
+  width: 40px;
+  height: 40px;
+  /* background-color: #fff; */
+  border-radius: 50%;
+  position: relative;
+}
+.icon__admin {
+  width: 40px;
+  height: 40px;
+  /* color: #0056b3; */
+  cursor: pointer;
+}
+
+.menu__box {
+  position: absolute;
+  bottom: 0;
+  top: 45px;
+  right: 0;
+  background-color: #fff;
+  transition: all 150ms ease-in-out;
+  width: 400px;
+  height: 300px;
+  border-radius: 20px;
+  box-shadow: 2px 0px 51px 0px rgba(0, 0, 0, 0.827);
+  z-index: 3;
+}
+.menu__box--header {
+  width: 100%;
+  height: 70px;
+  position: relative;
+  z-index: 0;
+  border-bottom: 1px solid #ccc;
+}
+.menu__box--main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90%;
+  gap: 15px;
+}
+.x-mark {
+  position: absolute;
+  left: -25px;
+  top: -25px;
+  background-color: #fff;
+  border-radius: 25px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.time-box__wrapper {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+}
+.time-box {
+}
+
+.overflow--icon {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #ffffff00;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.modal-bkup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal-content-bkup {
+  background: #fff;
+  padding: 20px;
+  margin: 15% auto;
+  width: 300px;
+  border-radius: 6px;
+  text-align: center;
+}
+.actions button {
+  margin: 5px;
+}

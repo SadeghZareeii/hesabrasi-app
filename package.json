@@ -1,0 +1,28 @@
+{
+  "name": "hesabrasi",
+  "version": "2.9.0",
+  "description": "Hesabrasi - desktop accounting for donors & recipients",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.hesabrasi.app",
+    "productName": "Hesabrasi",
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "devDependencies": {
+    "electron": "^38.2.1",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "moment-jalaali": "^0.10.4"
+  }
+}
