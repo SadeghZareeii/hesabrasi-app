@@ -52,8 +52,8 @@ npm start
 
 ### 📁 Project Structure
 
-hesabrasi-app/
-├── assets/ # Icons and images
+hesabrasi-app/<br>
+├── assets/ # Icons and images<br>
 ├── css/ # Stylesheets
 ├── renderer/ # Renderer process scripts
 ├── index.html # Main UI
