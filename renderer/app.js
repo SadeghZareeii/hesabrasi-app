@@ -1,10 +1,11 @@
 // renderer/app.js
+
 const { ipcRenderer } = require("electron");
 
 // --- State ---
 let data = [];
 let currentPage = 1;
-const itemsPerPage = 6;
+const itemsPerPage = 5;
 let editIndex = null;
 
 // --- Bootstrap ---
@@ -17,7 +18,7 @@ window.onload = async () => {
     data = [];
   }
   // Newest first
-  data = Array.isArray(data) ? data.reverse() : [];
+  data = Array.isArray(data) ? data : [];
 
   initLoginPage();
   initIndexPage();
@@ -79,6 +80,7 @@ function initIndexPage() {
       await ipcRenderer.invoke("save-data", data);
       alert("اطلاعات ذخیره شد ✅");
       e.target.reset();
+      
     } catch (err) {
       console.error("Save data error:", err);
       alert("خطا در ذخیره اطلاعات ❌");
@@ -92,20 +94,47 @@ function initIndexPage() {
   document.getElementById("backupBtn")?.addEventListener("click", async () => {
     try {
       const backupPath = await ipcRenderer.invoke("backup-data");
-      alert(
-        backupPath
-          ? "بکاپ گرفته شد ✅\n" + backupPath
-          : "فایل داده‌ای یافت نشد ❌"
-      );
+      alert(backupPath ? "اطلاعات ذخیره شد ✅\n" : "فایل داده‌ای یافت نشد ❌");
     } catch (err) {
       console.error("Backup error:", err);
-      alert("خطا در بکاپ ❌");
+      alert("خطا درذخیره اطلاعات ❌");
     }
   });
+  document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
+  console.log(document.elementFromPoint(window.innerWidth/2, window.innerHeight/2));
+  
 }
 
+// دکمه انتخاب فایل جدید
+document
+  .getElementById("reset-backup-btn")
+  .addEventListener("click", async () => {
+    const result = await dialog.showOpenDialog({
+      title: "انتخاب فایل جدید",
+      filters: [{ name: "JSON Files", extensions: ["json"] }],
+      properties: ["openFile"],
+    });
+
+    let newFilePath = null;
+    if (!result.canceled && result.filePaths.length > 0) {
+      newFilePath = result.filePaths[0];
+    }
+
+    ipcRenderer.invoke("resetBackup", newFilePath).then((res) => {
+      if (res.success) {
+        loadData();
+        renderTable();
+        alert(res.message);
+      } else {
+        alert("خطا ❌: " + res.error);
+      }
+    });
+  });
+
 // --- List page ---
-function initListPage() {
+async function initListPage() {
+  data = await ipcRenderer.invoke("load-data"); // 👈
+
   const table = document.getElementById("table");
   const fieldRow = document.getElementById("field-row");
   const dataRows = document.getElementById("data-rows");
@@ -136,14 +165,28 @@ function initListPage() {
   saveEditBtn?.addEventListener("click", async () => {
     const form = document.getElementById("edit-form");
     if (editIndex == null || !form) return;
+
+    // ساخت آیتم جدید از روی فرم
+    const updatedItem = {};
     const inputs = form.querySelectorAll("input, textarea");
     inputs.forEach((input) => {
-      data[editIndex][input.name] = input.value;
+      updatedItem[input.name] = input.value;
     });
+
+    // شناسه قبلی رو نگه داریم
+    updatedItem.id = data[editIndex].id;
+
+    // آیتم قدیمی رو حذف کن
+    data.splice(editIndex, 1);
+
+    // آیتم جدید رو بذار آخر آرایه (مثل Add)
+    data.push(updatedItem);
+
     try {
       await ipcRenderer.invoke("save-data", data);
       editModal.style.display = "none";
       renderTable();
+      editIndex = null;
     } catch (err) {
       console.error("Edit save error:", err);
       alert("خطا در ذخیره ویرایش ❌");
@@ -179,96 +222,6 @@ function getAllFields() {
 }
 
 // Render table
-// function renderTable() {
-//   const fieldRow = document.getElementById("field-row");
-//   const dataRows = document.getElementById("data-rows");
-//   const search = document.getElementById("search")?.value?.toLowerCase() || "";
-//   const fields = getAllFields();
-
-//   if (!fieldRow || !dataRows) return;
-
-//   fieldRow.innerHTML = "";
-//   dataRows.innerHTML = "";
-
-//   // Filter by any value
-//   const filtered = data.filter((item) =>
-//     Object.values(item).some((val) =>
-//       (val ?? "").toString().toLowerCase().includes(search)
-//     )
-//   );
-
-//   // Paginate
-//   const pageItems = filtered.slice(
-//     (currentPage - 1) * itemsPerPage,
-//     currentPage * itemsPerPage
-//   );
-
-//   // Header cells for page columns
-//   for (let i = 0; i < itemsPerPage; i++) {
-//     const th = document.createElement("th");
-//     th.textContent = pageItems[i]
-//       ? `مددجو ${i + 1 + (currentPage - 1) * itemsPerPage}`
-//       : "خالی";
-//     fieldRow.appendChild(th);
-//   }
-
-//   // Data rows: each row is a field, each column is an item
-//   // Data rows: each row is a field, each column is an item
-//   // fields.forEach((field) => {
-//   //   const tr = document.createElement("tr");
-//   //   for (let i = 0; i < itemsPerPage; i++) {
-//   //     const td = document.createElement("td");
-
-//   //     // اگر فیلد "توضیحات" بود، کلاس مخصوص بده
-
-//   //     td.classList.add(`value${field}`);
-
-//   //     td.textContent = pageItems[i]?.[field] || "";
-//   //     tr.appendChild(td);
-//   //   }
-//   //   dataRows.appendChild(tr);
-//   // });
-
-//   fields.forEach((field) => {
-//     const tr = document.createElement("tr");
-
-//     for (let i = 0; i < itemsPerPage; i++) {
-//       const td = document.createElement("td");
-
-//       // ساختن اسم کلاس امن (جایگزین فاصله با - و حذف کاراکترهای غیرمجاز)
-//       const safeField = field
-//         .replace(/\s+/g, "-")
-//         .replace(/[^\w\u0600-\u06FF-]/g, "");
-
-//       td.setAttribute("title", field);
-//       td.classList.add(`value-${safeField}`);
-
-//       td.textContent = pageItems[i]?.[field] || "";
-//       tr.appendChild(td);
-//     }
-
-//     dataRows.appendChild(tr);
-//   });
-
-//   // Actions row: edit / delete / print
-//   const actionRow = document.createElement("tr");
-//   for (let i = 0; i < itemsPerPage; i++) {
-//     const td = document.createElement("td");
-//     if (pageItems[i]) {
-//       const globalIndex = (currentPage - 1) * itemsPerPage + i;
-//       td.innerHTML = `
-//         <button onclick="editItem(${globalIndex})">ویرایش</button>
-//         <button onclick="deleteItem(${globalIndex})">حذف</button>
-//         <button onclick="printItem(${globalIndex})">مشاهده اطلاعات/چاپ</button>
-//       `;
-//     }
-//     actionRow.appendChild(td);
-//   }
-//   dataRows.appendChild(actionRow);
-
-//   renderPagination(filtered.length);
-// }
-
 function renderTable() {
   const fieldRow = document.getElementById("field-row");
   const dataRows = document.getElementById("data-rows");
@@ -287,8 +240,12 @@ function renderTable() {
     )
   );
 
-  // 🔹 جدیدترین آیتم‌ها اول
-  const ordered = filtered.slice().reverse();
+  // نگه‌داشتن ایندکس واقعی و نمایش جدیدترین بالا
+  const ordered = filtered.map((item) => ({
+    item,
+    originalIndex: data.indexOf(item),
+  }));
+  // .reverse();
 
   // صفحه‌بندی
   const pageItems = ordered.slice(
@@ -319,7 +276,7 @@ function renderTable() {
       td.setAttribute("title", field);
       td.classList.add(`value-${safeField}`);
 
-      td.textContent = pageItems[i]?.[field] || "";
+      td.textContent = pageItems[i]?.item?.[field] || "";
       tr.appendChild(td);
     }
 
@@ -331,7 +288,7 @@ function renderTable() {
   for (let i = 0; i < itemsPerPage; i++) {
     const td = document.createElement("td");
     if (pageItems[i]) {
-      const globalIndex = data.indexOf(pageItems[i]); // ایندکس درست در آرایه اصلی
+      const globalIndex = pageItems[i].originalIndex;
       td.innerHTML = `
         <button onclick="editItem(${globalIndex})">ویرایش</button>
         <button onclick="deleteItem(${globalIndex})">حذف</button>
@@ -384,77 +341,6 @@ function renderPagination(totalItems) {
     container.appendChild(next);
   }
 }
-
-// Global list actions
-window.editItem = (index) => {
-  editIndex = index;
-  const item = data[index];
-  const form = document.getElementById("edit-form");
-  const modal = document.getElementById("edit-modal");
-
-  if (!form || !modal || !item) return;
-
-  form.innerHTML = "";
-
-  getAllFields().forEach((field) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "form-row";
-
-    const label = document.createElement("label");
-    label.textContent = field;
-    label.setAttribute("for", field);
-
-    const input =
-      field === "توضیحات"
-        ? document.createElement("textarea")
-        : document.createElement("input");
-
-    input.name = field;
-    input.id = field;
-    input.value = item[field] || "";
-    input.placeholder = field;
-
-    wrapper.appendChild(label);
-    wrapper.appendChild(input);
-    form.appendChild(wrapper);
-  });
-
-  modal.style.display = "flex";
-};
-
-window.deleteItem = async (index) => {
-  const item = data[index];
-  if (!item) return;
-
-  const confirmed = confirm(
-    `آیا "${item["نام"] || ""} ${item["نام خانوادگی"] || ""}" حذف شود؟`
-  );
-  if (!confirmed) return;
-
-  // Remove and persist (keep current order)
-  data.splice(index, 1);
-
-  try {
-    await ipcRenderer.invoke("save-data", data);
-    // بعد از ذخیره موفق، صفحه رفرش بشه
-    window.location.reload();
-    renderTable();
-  } catch (err) {
-    console.error("Delete save error:", err);
-    alert("خطا در ذخیره پس از حذف ❌");
-  }
-};
-
-window.printItem = (index) => {
-  const item = data[index];
-  if (!item) return;
-  try {
-    localStorage.setItem("printData", JSON.stringify(item));
-  } catch (err) {
-    console.error("LocalStorage set error:", err);
-  }
-  location.href = "print.html";
-};
 
 // --- Print page ---
 // renderer/app.js (بخش چاپ را جایگزین کن)
@@ -596,32 +482,3 @@ function initPasswordModal() {
     }
   });
 }
-
-// close Or open Menu
-
-const adminIcon = document.querySelector(".icon__admin");
-const xMark = document.querySelector(".x-mark");
-const menuBox = document.querySelector(".menu__box");
-const overflowIcon = document.querySelector(".overflow--icon");
-
-const openBtn = () => menuBox.classList.remove("hidden");
-const closeeBtn = () => menuBox.classList.add("hidden");
-
-adminIcon.addEventListener("click", openBtn);
-xMark.addEventListener("click", closeeBtn);
-overflowIcon.addEventListener("click", closeeBtn);
-
-// Calender And Time
-
-const moment = require("moment-jalaali");
-moment.loadPersian({ dialect: "persian-modern", usePersianDigits: true });
-
-function updateDateTime() {
-  document.getElementById("clock").textContent = moment().format("HH:mm:ss");
-  document.getElementById("date").textContent = moment().format(
-    "dddd jD jMMMM jYYYY"
-  );
-}
-
-setInterval(updateDateTime, 1000);
-updateDateTime();

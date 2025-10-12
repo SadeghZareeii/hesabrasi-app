@@ -1,6 +1,6 @@
 {
   "name": "hesabrasi",
-  "version": "2.9.0",
+  "version": "3.6.4",
   "description": "Hesabrasi - desktop accounting for donors & recipients",
   "main": "main.js",
   "scripts": {

@@ -84,17 +84,24 @@
               <button class="btn backup__btn" id="backupBtn">
                 پشتیبانی از اطلاعات
               </button>
+              <button
+                type="button"
+                class="btn backup__btn"
+                onclick="resetBackup()"
+              >
+                بار گذاری اطلاعات انتخاب شده
+              </button>
+              <button id="clearAllDataBtn">حذف کل اطلاعات</button>
               <button class="open__password--modal" id="openPasswordModal">
                 تغییر رمز ورود
               </button>
             </div>
-            <div class="  overflow--icon"></div>
+            <div class="overflow--icon"></div>
           </div>
         </div>
       </div>
       <div class="container__wrapper">
         <form id="form" class="grid-form">
-          <!--  -->
           <div class="">
             <label for="field1">نام:</label>
             <input id="field1" type="text" name="نام" placeholder="نام" />
@@ -180,10 +187,7 @@
               placeholder="نیازها"
             />
           </div>
-          <div class="">
-            <label for="field11">آدرس:</label>
-            <input id="field11" type="text" name="آدرس" placeholder="آدرس" />
-          </div>
+
           <div class="">
             <label for="field12">تعداد نفرات خانواده:</label>
             <input
@@ -247,6 +251,10 @@
               placeholder="تاریخ انجام"
             />
           </div>
+          <div class="">
+            <label for="field11">آدرس:</label>
+            <input id="field11" type="text" name="آدرس" placeholder="آدرس" />
+          </div>
           <div class="full-row">
             <label for="field17">توضیحات:</label>
             <textarea id="17" name="توضیحات" placeholder="توضیحات"></textarea>
@@ -257,8 +265,6 @@
         </form>
       </div>
     </div>
-
-    <!-- دکمه تغییر رمز -->
 
     <!-- مودال تغییر رمز -->
     <div id="password-modal" class="modal" style="display: none">
@@ -271,6 +277,124 @@
       </div>
     </div>
 
+    <!-- مودال تأیید -->
+    <div
+      id="confirmModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #00000088;
+        z-index: 999;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          background: white;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+          max-width: 300px;
+        "
+      >
+        <p>آیا مطمئن هستید که می‌خواهید تمام اطلاعات را حذف کنید؟</p>
+        <button id="confirmDeleteBtn" style="margin: 5px">بله، حذف شود</button>
+        <button id="cancelDeleteBtn" style="margin: 5px">لغو</button>
+      </div>
+    </div>
+
     <script src="renderer/app.js"></script>
+    <script>
+      const clearAllDataBtn = document.getElementById("clearAllDataBtn");
+      const confirmModal = document.getElementById("confirmModal");
+      const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+      const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+
+      // نمایش مودال
+      clearAllDataBtn.onclick = () => {
+        confirmModal.style.display = "flex";
+      };
+
+      // لغو حذف
+      cancelDeleteBtn.onclick = () => {
+        confirmModal.style.display = "none";
+      };
+
+      // تأیید حذف
+      confirmDeleteBtn.onclick = async () => {
+        try {
+          const result = await ipcRenderer.invoke("clear-all-data");
+          if (result.ok) {
+            alert(" تمام اطلاعات با موفقیت حذف شد");
+            window.location.reload();
+          } else {
+            alert(" خطا در حذف اطلاعات:\n" + result.message);
+          }
+        } catch (err) {
+          console.error("Clear data error:", err);
+          alert(" خطای غیرمنتظره:\n" + err.message);
+        } finally {
+          confirmModal.style.display = "none";
+        }
+      };
+      // close Or open Menu
+      const adminIcon = document.querySelector(".icon__admin");
+      const xMark = document.querySelector(".x-mark");
+      const menuBox = document.querySelector(".menu__box");
+      const overflowIcon = document.querySelector(".overflow--icon");
+
+      const openBtn = () => menuBox.classList.remove("hidden");
+      const closeeBtn = () => menuBox.classList.add("hidden");
+
+      adminIcon.addEventListener("click", openBtn);
+      xMark.addEventListener("click", closeeBtn);
+      overflowIcon.addEventListener("click", closeeBtn);
+
+      // Calender And Time
+
+      const moment = require("moment-jalaali");
+      moment.loadPersian({ dialect: "persian-modern", usePersianDigits: true });
+
+      function updateDateTime() {
+        document.getElementById("clock").textContent =
+          moment().format("HH:mm:ss");
+        document.getElementById("date").textContent = moment().format(
+          "dddd jD jMMMM jYYYY"
+        );
+      }
+
+      setInterval(updateDateTime, 1000);
+      updateDateTime();
+      // reset back up
+      window.resetBackup = async () => {
+        const confirmed = confirm(
+          "آیا مطمئن هستید که می‌خواهید داده‌ها را جایگزین کنید؟\n این عملیات قابل بازگشت نیست. \n قبل از هرچیزی اطمینان حاصل کنید از  ذخیره ی اطلاعات موجود "
+        );
+        if (!confirmed) return;
+
+        try {
+          const result = await ipcRenderer.invoke("reset-backup");
+
+          if (result.ok) {
+            alert("✅ اطلاعات با موفقیت جایگزین شد");
+            window.location.reload();
+          } else if (result.cancelled) {
+            console.log("کاربر عملیات را لغو کرد");
+          } else if (result.message) {
+            alert("❌ خطا در بازیابی اطلاعات:\n" + result.message);
+          } else {
+            alert("❌ خطای ناشناخته در بازیابی اطلاعات");
+          }
+        } catch (err) {
+          console.error("Reset backup error:", err);
+          alert("❌ خطای غیرمنتظره در بازیابی اطلاعات:\n" + err.message);
+        }
+      };
+    </script>
   </body>
 </html>

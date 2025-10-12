@@ -36,5 +36,81 @@
     </div>
 
     <script src="renderer/app.js"></script>
+    <script>
+      window.onload = () => initListPage();
+
+      // Global list actions
+      window.editItem = function (index) {
+        editIndex = index;
+        const item = data[index];
+        const form = document.getElementById("edit-form");
+        const modal = document.getElementById("edit-modal");
+
+        if (!form || !modal || !item) return;
+
+        form.innerHTML = "";
+
+        getAllFields().forEach((field) => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "form-row";
+
+          const label = document.createElement("label");
+          label.textContent = field;
+          label.setAttribute("for", field);
+
+          const input =
+            field === "توضیحات"
+              ? document.createElement("textarea")
+              : document.createElement("input");
+
+          input.name = field;
+          input.id = field;
+          input.value = item[field] || "";
+          input.placeholder = field;
+
+          wrapper.appendChild(label);
+          wrapper.appendChild(input);
+          form.appendChild(wrapper);
+        });
+
+        modal.style.display = "flex";
+      };
+
+      window.deleteItem = async (index) => {
+        const item = data[index];
+        if (!item) return;
+
+        const confirmed = confirm(
+          `آیا "${item["نام"] || ""} ${item["نام خانوادگی"] || ""}" حذف شود؟`
+        );
+        if (!confirmed) return;
+
+        // Remove and persist (keep current order)
+        data.splice(index, 1);
+
+        try {
+          await ipcRenderer.invoke("save-data", data);
+          // بعد از ذخیره موفق، صفحه رفرش بشه
+          window.location.reload();
+          renderTable();
+        } catch (err) {
+          console.error("Delete save error:", err);
+          alert("خطا در ذخیره پس از حذف ❌");
+        }
+      };
+
+      window.printItem = (index) => {
+        const item = data[index];
+        if (!item) return;
+        try {
+          localStorage.setItem("printData", JSON.stringify(item));
+        } catch (err) {
+          console.error("LocalStorage set error:", err);
+        }
+        location.href = "print.html";
+      };
+
+      console.log(typeof editItem);
+    </script>
   </body>
 </html>
