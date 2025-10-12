@@ -57,14 +57,14 @@ npm start
 
 ### 🧩 Features
 
-• -Add, edit, delete, and search user records <br>
-• -Print data in A4 format with embedded fonts <br>
-• -Backup and restore functionality <br>
-• -Responsive and fast UI <br>
-• -Font embedding via Base64 for consistent PDF output <br>
-• -Device settings management (e.g. Wi-Fi, email) <br>
-• -Table refresh and pagination <br>
-• -Error handling and success messages for print operations <br>
+• Add, edit, delete, and search user records <br>
+• Print data in A4 format with embedded fonts <br>
+• Backup and restore functionality <br>
+• Responsive and fast UI <br>
+• Font embedding via Base64 for consistent PDF output <br>
+• Device settings management (e.g. Wi-Fi, email) <br>
+• Table refresh and pagination <br>
+• Error handling and success messages for print operations <br>
 
 ### 📁 Project Structure
 
@@ -82,20 +82,20 @@ hesabrasi-app/<br>
 
 ### 🛠 Development Notes
 
-• -Built with Electron JS and vanilla JavaScript <br>
-• -UI optimized for Persian-language users <br>
-• -Designed for long-term maintainability and print accuracy <br>
-• -Compatible with Windows systems <br>
+• Built with Electron JS and vanilla JavaScript <br>
+• UI optimized for Persian-language users <br>
+• Designed for long-term maintainability and print accuracy <br>
+• Compatible with Windows systems <br>
 
 ### 📌 Future Improvements
 
-• -Add user authentication <br>
-• -Export to Excel and PDF <br> 
-• -Multi-language support <br>
-• -Dark mode toggle <br>
+• Add user authentication <br>
+• Export to Excel and PDF <br> 
+• Multi-language support <br>
+• Dark mode toggle <br>
 
 ### 📄 License
 
 This project is licensed under the MIT License. See the LICENSE file for details <br>
 
-<h1 style="color:red;"> Copyright (c) 2025 Sadegh Zarei </h1> 
+<h1> Copyright (c) 2025 Sadegh Zarei </h1> 
