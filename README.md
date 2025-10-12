@@ -33,6 +33,22 @@ cd hesabrasi-app
 npm install
 ```
 
+```bash
+npm install --save-dev electron    
+```
+
+```bash
+npm install --save-dev electron-builder
+```
+
+### 🛠 Build Installer
+
+To build a Windows installer:
+
+```bash
+npm run dist     
+```
+
 #### 3. Start the application
 
 ```bash
@@ -82,4 +98,4 @@ hesabrasi-app/<br>
 
 This project is licensed under the MIT License. See the LICENSE file for details <br>
 
-<h1> Copyright (c) 2025 Sadegh Zarei </h1> 
+<h1 style="color:red;"> Copyright (c) 2025 Sadegh Zarei </h1> 
