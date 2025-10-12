@@ -12,7 +12,10 @@ const dataFile = path.join(app.getPath("userData"), "data.json");
 const passwordFile = path.join(app.getPath("userData"), "password.json");
 
 // مسیر آیکون (dev یا نصب‌شده)
-const appIcon = path.join(__dirname, "assets/icon.ico");
+// const appIcon = path.join(__dirname, "assets/icon.ico"); 
+const appIcon = process.platform === "darwin"
+  ? path.join(__dirname, "assets/icon.icns")
+  : path.join(__dirname, "assets/icon.ico");
 
 function createWindow() {
   // اطمینان از وجود فایل داده قبل از ساخت پنجره
