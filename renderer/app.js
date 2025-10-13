@@ -80,7 +80,6 @@ function initIndexPage() {
       await ipcRenderer.invoke("save-data", data);
       alert("اطلاعات ذخیره شد ✅");
       e.target.reset();
-      
     } catch (err) {
       console.error("Save data error:", err);
       alert("خطا در ذخیره اطلاعات ❌");
@@ -101,8 +100,9 @@ function initIndexPage() {
     }
   });
   document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
-  console.log(document.elementFromPoint(window.innerWidth/2, window.innerHeight/2));
-  
+  console.log(
+    document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2)
+  );
 }
 
 // دکمه انتخاب فایل جدید

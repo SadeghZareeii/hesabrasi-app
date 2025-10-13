@@ -25,4 +25,4 @@ window.addEventListener("keyup", async (e) => {
   }
 });
 
-window.onload = async () => document.querySelector("input").focus()
+window.onload = async () => document.querySelector("input").focus();

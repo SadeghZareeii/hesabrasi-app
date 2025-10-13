@@ -17,7 +17,7 @@
       "target": "nsis",
       "icon": "build/icon.ico"
     },
-      "mac": {
+    "mac": {
       "target": "dmg",
       "icon": "assets/icon.icns",
       "category": "public.app-category.productivity"
