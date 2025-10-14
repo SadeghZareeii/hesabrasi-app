@@ -13,7 +13,7 @@
   </head>
   <body>
     <h1>لیست اطلاعات ثبت‌شده</h1>
-    <button id="goBackBtn">برگشت به فرم</button>
+    <button id="goBackBtn">برگشت به صحفه اصلی</button>
     <input id="search" placeholder="جستجو بر اساس نام یا نام خانوادگی" />
     <div class="table-wrapper">
       <table id="table">
@@ -38,7 +38,6 @@
     <script src="renderer/app.js"></script>
     <script>
       window.onload = () => initListPage();
-
       // Global list actions
       window.editItem = function (index) {
         editIndex = index;
@@ -109,8 +108,6 @@
         }
         location.href = "print.html";
       };
-
-      console.log(typeof editItem);
     </script>
   </body>
 </html>

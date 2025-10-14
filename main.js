@@ -171,6 +171,15 @@ ipcMain.handle("check-password", async (_, input) => {
   }
 });
 
+ipcMain.handle("get-client-count", async () => {
+  try {
+    const raw = fs.readFileSync(dataFile, "utf8");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.length : 0;
+  } catch {
+    return 0;
+  }
+});
 // Password: change
 ipcMain.handle("change-password", async (_, newPass) => {
   try {
@@ -243,6 +252,18 @@ ipcMain.handle("generate-html-report", async (_, item, fileNameSuggestion) => {
 <title>گزارش مددجو</title>
 
    <style>
+   
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+*,
+:after,
+:before {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
       /* Font Css */
 
       @font-face {
@@ -271,7 +292,6 @@ ipcMain.handle("generate-html-report", async (_, item, fileNameSuggestion) => {
         font-family: "Nazanin";
         border: 6px solid #000;
       }
-        
       .bism {
         text-align: center;
         font-size: 16px;

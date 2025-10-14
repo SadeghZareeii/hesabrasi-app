@@ -4,6 +4,7 @@ const { ipcRenderer } = require("electron");
 
 // --- State ---
 let data = [];
+let count = 0;
 let currentPage = 1;
 const itemsPerPage = 5;
 let editIndex = null;
@@ -13,6 +14,7 @@ window.onload = async () => {
   // Load data once
   try {
     data = await ipcRenderer.invoke("load-data");
+    count = await ipcRenderer.invoke("get-client-count");
   } catch (e) {
     console.error("Load data error:", e);
     data = [];
@@ -25,8 +27,14 @@ window.onload = async () => {
   initListPage();
   initPrintPage();
   initPasswordModal();
+  showCountUser();
 };
 
+const showCountUser = () => {
+  const countUsers = document.querySelector(".counting__users p");
+
+  countUsers.textContent = count
+};
 // --- Login page ---
 function initLoginPage() {
   const pwdInput = document.getElementById("passwordInput");
@@ -74,10 +82,12 @@ function initIndexPage() {
     formData.id = Date.now();
 
     // Add newest on top
-    data.unshift(formData);
+    data.push(formData);
 
     try {
       await ipcRenderer.invoke("save-data", data);
+      count = await ipcRenderer.invoke("get-client-count");
+      showCountUser();
       alert("اطلاعات ذخیره شد ✅");
       e.target.reset();
     } catch (err) {
@@ -99,10 +109,6 @@ function initIndexPage() {
       alert("خطا درذخیره اطلاعات ❌");
     }
   });
-  document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
-  console.log(
-    document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2)
-  );
 }
 
 // دکمه انتخاب فایل جدید
@@ -133,7 +139,7 @@ document
 
 // --- List page ---
 async function initListPage() {
-  data = await ipcRenderer.invoke("load-data"); // 👈
+  data = await ipcRenderer.invoke("load-data");
 
   const table = document.getElementById("table");
   const fieldRow = document.getElementById("field-row");
@@ -241,11 +247,12 @@ function renderTable() {
   );
 
   // نگه‌داشتن ایندکس واقعی و نمایش جدیدترین بالا
-  const ordered = filtered.map((item) => ({
-    item,
-    originalIndex: data.indexOf(item),
-  }));
-  // .reverse();
+  const ordered = filtered
+    .map((item) => ({
+      item,
+      originalIndex: data.indexOf(item),
+    }))
+    .reverse();
 
   // صفحه‌بندی
   const pageItems = ordered.slice(
