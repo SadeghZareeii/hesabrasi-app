@@ -392,14 +392,13 @@
         try {
           const result = await ipcRenderer.invoke("clear-all-data");
           if (result.ok) {
-            alert(" تمام اطلاعات با موفقیت حذف شد");
+            openModalAddList(" تمام اطلاعات با موفقیت حذف شد");
             window.location.reload();
           } else {
-            alert(" خطا در حذف اطلاعات:\n" + result.message);
+            openModalAddList(" خطا در حذف اطلاعات:\n" + result.message);
           }
         } catch (err) {
-          console.error("Clear data error:", err);
-          alert(" خطای غیرمنتظره:\n" + err.message);
+          openModalAddList(" خطای غیرمنتظره:\n" + err.message);
         } finally {
           confirmModal.style.display = "none";
         }

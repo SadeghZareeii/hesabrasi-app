@@ -82,7 +82,7 @@ ipcMain.handle("reset-backup", async () => {
     if (canceled || !filePaths?.[0]) {
       return { ok: false, cancelled: true };
     }
-
+ 
     const backupPath = filePaths[0];
     const raw = fs.readFileSync(backupPath, "utf8");
     const parsed = JSON.parse(raw);
