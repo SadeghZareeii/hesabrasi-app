@@ -82,7 +82,7 @@ ipcMain.handle("reset-backup", async () => {
     if (canceled || !filePaths?.[0]) {
       return { ok: false, cancelled: true };
     }
- 
+
     const backupPath = filePaths[0];
     const raw = fs.readFileSync(backupPath, "utf8");
     const parsed = JSON.parse(raw);
@@ -309,7 +309,7 @@ html {
         font-size: 18px;
       }
 
-      .title-h1 h2 {
+      .title-h1 h3 {
         font-weight: 500;
         margin: 0 0 10px 0;
       }
@@ -339,9 +339,8 @@ html {
         display: flex;
         flex: 0 0 30%;
         font-weight: bold;
-        padding: 10px;
         border-left: 1px solid #000;
-        font-size: 10px;
+        font-size: 15px;
         align-items: center;
         flex-wrap: wrap;
         justify-content: center;
@@ -350,7 +349,7 @@ html {
       .value {
         display: flex;
         flex: 1;
-        padding: 8px;
+        padding: 0 10px 0 0;
         word-wrap: break-word;
         white-space: pre-wrap;
         font-size: 15px;
@@ -381,13 +380,14 @@ html {
       }
       /* بخش آدرس */
       .address-section {
-        font-size: 14px;
+        font-size: 16px;
         line-height: 1.6;
+        font-style: italic;
       }
       .address-section h4 {
-        font-size: 16px;
+        font-size: 15px;
         margin: 0 0 5px 0;
-        color: #444;
+        color: #222;
         border-bottom: 1px solid #ccc;
       }
 
@@ -453,9 +453,10 @@ html {
 <body>
   <h1 class="bism">بسم تعالی</h1>
   <div class="title-h1">
-    <h1>فرم ثبت اطلاعات دریافت و پرداخت مساعدت‌های<br>خیر کانون فرهنگی هنری مسجد حضرت ولی عصر (عج)</h1>
+    <h1>فرم ثبت اطلاعات دریافت و پرداخت مساعدت‌های<br>خیریه کانون فرهنگی هنری مسجد حضرت ولی عصر (عج)</h1>
 
-    <h2>گزارش مددجو</h2>
+    <h3> تاسیس 1384</h3>
+
   </div>
 
   <div class="report-container">
