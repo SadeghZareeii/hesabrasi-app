@@ -35,8 +35,86 @@
       </div>
     </div>
 
+    <div
+      id="listModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #00000088;
+        z-index: 999;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          background: white;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+          width: 420px;
+          height: 150px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-evenly;
+        "
+      >
+        <p id="listCaption" style="font-family: 'titr'"></p>
+        <button id="okModalBtn" style="margin: 5px; width: 70px">بستن</button>
+      </div>
+    </div>
+
+    <!-- modal Delet -->
+    <div id="confirm-modal" class="modal-confirm">
+      <div class="modal-content__confirm">
+        <p id="confirm-message"></p>
+        <div class="modal-actions__confirm">
+          <button id="confirm-yes">بله</button>
+          <button id="confirm-no">خیر</button>
+        </div>
+      </div>
+    </div>
     <script src="renderer/app.js"></script>
     <script>
+      // modal Delet fun
+      function openConfirmModal(message, onConfirm) {
+        const modal = document.getElementById("confirm-modal");
+        const msg = document.getElementById("confirm-message");
+        const yesBtn = document.getElementById("confirm-yes");
+        const noBtn = document.getElementById("confirm-no");
+
+        msg.textContent = message;
+        modal.style.display = "flex";
+
+        // پاک کردن لیسنرهای قبلی
+        yesBtn.onclick = null;
+        noBtn.onclick = null;
+
+        yesBtn.onclick = () => {
+          modal.style.display = "none";
+          onConfirm(true);
+        };
+        noBtn.onclick = () => {
+          modal.style.display = "none";
+          onConfirm(false);
+        };
+      }
+
+      const openModalAddList = (string) => {
+        listModal.style.display = "flex";
+        listCaption.textContent = string;
+      };
+
+      okModalBtn.onclick = () => {
+        listModal.style.display = "none";
+        listCaption.textContent = "";
+      };
+
       window.onload = () => initListPage();
       // Global list actions
       window.editItem = function (index) {
@@ -79,23 +157,22 @@
         const item = data[index];
         if (!item) return;
 
-        const confirmed = confirm(
-          `آیا "${item["نام"] || ""} ${item["نام خانوادگی"] || ""}" حذف شود؟`
+        openConfirmModal(
+          `آیا "${item["نام"] || ""} ${item["نام خانوادگی"] || ""}" حذف شود؟`,
+          async (confirmed) => {
+            if (!confirmed) return;
+
+            data.splice(index, 1);
+
+            try {
+              await ipcRenderer.invoke("save-data", data);
+              window.location.reload();
+              renderTable();
+            } catch (err) {
+              openModalAddList("خطا در ذخیره پس از حذف:\n" + err);
+            }
+          }
         );
-        if (!confirmed) return;
-
-        // Remove and persist (keep current order)
-        data.splice(index, 1);
-
-        try {
-          await ipcRenderer.invoke("save-data", data);
-          // بعد از ذخیره موفق، صفحه رفرش بشه
-          window.location.reload();
-          renderTable();
-        } catch (err) {
-          console.error("Delete save error:", err);
-          alert("خطا در ذخیره پس از حذف ❌");
-        }
       };
 
       window.printItem = (index) => {
@@ -105,6 +182,10 @@
           localStorage.setItem("printData", JSON.stringify(item));
         } catch (err) {
           console.error("LocalStorage set error:", err);
+          openModalAddList(
+            "خطا در چاپ " + "\n" + "LocalStorage set error:",
+            err
+          );
         }
         location.href = "print.html";
       };

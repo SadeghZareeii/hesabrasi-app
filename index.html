@@ -317,10 +317,53 @@
       </div>
     </div>
 
+    <!-- بک اپ و... & مودال اضافه شدن به لیست -->
+    <div
+      id="listModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #00000088;
+        z-index: 999;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div
+        style="
+          background: white;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+          width: 420px;
+          height: 150px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-evenly;
+        "
+      >
+        <p id="listCaption" style="font-family: 'titr'"></p>
+        <button id="okModalBtn" style="margin: 5px; width: 70px">بستن</button>
+      </div>
+    </div>
+
+    <!-- modal reset -->
+    <div id="confirm-modal" class="modal-confirm">
+      <div class="modal-content__confirm">
+        <p id="confirm-message"></p>
+        <div class="modal-actions__confirm">
+          <button id="confirm-yes">بله</button>
+          <button id="confirm-no">خیر</button>
+        </div>
+      </div>
+    </div>
     <script src="renderer/app.js"></script>
     <script>
-      const clearAllDataBtn = document.getElementById("clearAllDataBtn");
-      const confirmModal = document.getElementById("confirmModal");
       const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
       const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
 
@@ -329,9 +372,19 @@
         confirmModal.style.display = "flex";
       };
 
+      const openModalAddList = (string) => {
+        listModal.style.display = "flex";
+        listCaption.textContent = string;
+      };
+
       // لغو حذف
       cancelDeleteBtn.onclick = () => {
         confirmModal.style.display = "none";
+      };
+
+      okModalBtn.onclick = () => {
+        listModal.style.display = "none";
+        listCaption.textContent = "";
       };
 
       // تأیید حذف
@@ -381,29 +434,58 @@
       updateDateTime();
       // reset back up
       window.resetBackup = async () => {
-        const confirmed = confirm(
-          "آیا مطمئن هستید که می‌خواهید داده‌ها را جایگزین کنید؟\n این عملیات قابل بازگشت نیست. \n قبل از هرچیزی اطمینان حاصل کنید از  ذخیره ی اطلاعات موجود "
-        );
-        if (!confirmed) return;
+        openConfirmModal(
+          "آیا مطمئن هستید که می‌خواهید داده‌ها را جایگزین کنید؟\nاین عملیات قابل بازگشت نیست.\nقبل از هرچیزی اطمینان حاصل کنید از ذخیره‌ی اطلاعات موجود",
+          async (confirmed) => {
+            if (!confirmed) return;
 
-        try {
-          const result = await ipcRenderer.invoke("reset-backup");
+            try {
+              const result = await ipcRenderer.invoke("reset-backup");
 
-          if (result.ok) {
-            alert("✅ اطلاعات با موفقیت جایگزین شد");
-            window.location.reload();
-          } else if (result.cancelled) {
-            console.log("کاربر عملیات را لغو کرد");
-          } else if (result.message) {
-            alert("❌ خطا در بازیابی اطلاعات:\n" + result.message);
-          } else {
-            alert("❌ خطای ناشناخته در بازیابی اطلاعات");
+              if (result.ok) {
+                openModalAddList("✅ اطلاعات با موفقیت جایگزین شد");
+                window.location.reload();
+              } else if (result.cancelled) {
+                console.log("کاربر عملیات را لغو کرد");
+                openModalAddList("کاربر عملیات را لغو کرد");
+              } else if (result.message) {
+                openModalAddList(
+                  "❌ خطا در بازیابی اطلاعات:\n" + result.message
+                );
+              } else {
+                openModalAddList("❌ خطای ناشناخته در بازیابی اطلاعات");
+              }
+            } catch (err) {
+              openModalAddList(
+                "❌ خطای غیرمنتظره در بازیابی اطلاعات:\n" + err.message
+              );
+            }
           }
-        } catch (err) {
-          console.error("Reset backup error:", err);
-          alert("❌ خطای غیرمنتظره در بازیابی اطلاعات:\n" + err.message);
-        }
+        );
       };
+
+      function openConfirmModal(message, onConfirm) {
+        const modal = document.getElementById("confirm-modal");
+        const msg = document.getElementById("confirm-message");
+        const yesBtn = document.getElementById("confirm-yes");
+        const noBtn = document.getElementById("confirm-no");
+
+        msg.textContent = message;
+        modal.style.display = "flex";
+
+        // پاک کردن لیسنرهای قبلی
+        yesBtn.onclick = null;
+        noBtn.onclick = null;
+
+        yesBtn.onclick = () => {
+          modal.style.display = "none";
+          onConfirm(true);
+        };
+        noBtn.onclick = () => {
+          modal.style.display = "none";
+          onConfirm(false);
+        };
+      }
     </script>
   </body>
 </html>

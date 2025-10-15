@@ -33,7 +33,7 @@ window.onload = async () => {
 const showCountUser = () => {
   const countUsers = document.querySelector(".counting__users p");
 
-  countUsers.textContent = count
+  countUsers.textContent = count;
 };
 // --- Login page ---
 function initLoginPage() {
@@ -54,7 +54,7 @@ function initLoginPage() {
     if (ok) {
       goToForm();
     } else {
-      errorMsg.textContent = "رمز اشتباه است ❌";
+      errorMsg.textContent = "رمز اشتباه است";
     }
   };
 
@@ -88,11 +88,10 @@ function initIndexPage() {
       await ipcRenderer.invoke("save-data", data);
       count = await ipcRenderer.invoke("get-client-count");
       showCountUser();
-      alert("اطلاعات ذخیره شد ✅");
+      openModalAddList("اطلاعات با موفقیت ذخیره شد");
       e.target.reset();
     } catch (err) {
-      console.error("Save data error:", err);
-      alert("خطا در ذخیره اطلاعات ❌");
+      openModalAddList("خطا در ذخیره اطلاعات " + "error:", +err);
     }
   });
 
@@ -103,10 +102,12 @@ function initIndexPage() {
   document.getElementById("backupBtn")?.addEventListener("click", async () => {
     try {
       const backupPath = await ipcRenderer.invoke("backup-data");
-      alert(backupPath ? "اطلاعات ذخیره شد ✅\n" : "فایل داده‌ای یافت نشد ❌");
+
+      openModalAddList(
+        backupPath ? "اطلاعات ذخیره شد \n" : "فایل داده‌ای یافت نشد "
+      );
     } catch (err) {
-      console.error("Backup error:", err);
-      alert("خطا درذخیره اطلاعات ❌");
+      openModalAddList("خطا درذخیره اطلاعات " + "Backup error:", err.message);
     }
   });
 }
@@ -130,9 +131,9 @@ document
       if (res.success) {
         loadData();
         renderTable();
-        alert(res.message);
+        openModalAddList(res.message);
       } else {
-        alert("خطا ❌: " + res.error);
+        openModalAddList("خطا : " + res.error);
       }
     });
   });
@@ -194,8 +195,10 @@ async function initListPage() {
       renderTable();
       editIndex = null;
     } catch (err) {
-      console.error("Edit save error:", err);
-      alert("خطا در ذخیره ویرایش ❌");
+      openModalAddList(
+        "خطا در ذخیره ویرایش " + "\n" + "Edit save error:",
+        err.message
+      );
     }
   });
 
@@ -416,11 +419,13 @@ function initPrintPage() {
     );
 
     if (res?.ok) {
-      alert("گزارش HTML ذخیره شد و در مرورگر باز شد:\n" + res.filePath);
+      openModalAddList(
+        "گزارش HTML ذخیره شد و در مرورگر باز شد:\n" + res.filePath
+      );
     } else if (res?.cancelled) {
-      alert("ذخیره‌سازی لغو شد ❌");
+      openModalAddList("ذخیره‌سازی لغو شد ");
     } else {
-      alert("خطا در ساخت گزارش HTML ❌\n" + (res?.message || ""));
+      openModalAddList("خطا در ساخت گزارش HTML ❌\n" + (res?.message || ""));
     }
   });
 
@@ -484,7 +489,7 @@ function initPasswordModal() {
         : "خطا در تغییر رمز ❌";
       if (ok) newPassEl.value = "";
     } catch (err) {
-      console.error("Change password error:", err);
+      console.error("Change password error:", err.message);
       msgEl.textContent = "خطای داخلی ❌";
     }
   });
